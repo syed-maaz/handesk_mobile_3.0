@@ -27,7 +27,7 @@ import AppTextInput from "../TextInput";
 import AppText from "../Text";
 import AppButton from "../Button";
 import listingsApi from "../../api/listings";
-import axios from 'axios'
+import axios from "axios";
 // import { Form, FormField, FormPicker as Picker } from "../forms";
 import Picker from "../Picker";
 import Screen from "../Screen";
@@ -101,7 +101,6 @@ const ReplyTicketModal = ({
     onSubmit({ comment: article });
   };
 
-
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -114,40 +113,42 @@ const ReplyTicketModal = ({
 
     if (!result.cancelled) {
       setTicketImage(result.uri);
-      console.log(result, "result")
+      // console.log(result, "result")
       const res = await listingsApi.signedImageUrl({ url: result.uri });
-      console.log("res", res);
-      const uploadImage = await axios.put(res.data.url, { headers: res.headers })
-      console.log("upload", uploadImage)
-      setUploaded(true)
+      // console.log("res", res);
+      const uploadImage = await axios.put(res.data.url, {
+        headers: res.headers,
+      });
+      // console.log("upload", uploadImage)
+      setUploaded(true);
     }
-
   };
   // console.log(ticketImage
   return (
     <>
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={isOpen}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
-        }}>
+        }}> */}
+      {isOpen && (
         <View style={styles.centeredView}>
           <Screen>
-            <Entypo
-              name="squared-cross"
-              size={30}
-              color="#013379"
-              onPress={closeModal}
-              style={{ textAlign: "right" }}
-            />
+            {/* <Entypo
+            name="squared-cross"
+            size={30}
+            color="#013379"
+            onPress={closeModal}
+            style={{ textAlign: "right" }}
+          /> */}
             <View style={styles.modalBox}>
-              <AppText style={styles.headingOne}>Reply </AppText>
+              {/* <AppText style={styles.headingOne}>Reply </AppText> */}
 
               <ScrollView>
-                <View style={styles.innerBox}>
-                  <View style={styles.inputBox}>
+                <View>
+                  <View>
                     <AppText style={styles.inputHeading}>FAQ Template</AppText>
                     <View style={styles.inputData}>{faqDropdown}</View>
                   </View>
@@ -201,24 +202,35 @@ const ReplyTicketModal = ({
                       value={isInternal}
                       onValueChange={setInternal}
                     /> */}
-                    <Checkbox
-                    mode="ios"
-                      color="#3d7ab9"
-                      status={isInternal ? "checked" : "unchecked"}
-                      onPress={() => {
-                        setInternal(!isInternal);
-                      }}
-                      style={{borderRadius:5,borderColor:"black",borderWidth:1}}
-                    />
+                    <View
+                      style={{
+                        borderRadius: 2,
+                        borderColor: "black",
+                        borderWidth: 0.2,
+                        // backgroundColor: "#000fff",
+                      }}>
+                      <Checkbox
+                        mode="ios"
+                        color="#3d7ab9"
+                        status={isInternal ? "checked" : "unchecked"}
+                        onPress={() => {
+                          setInternal(!isInternal);
+                        }}
+                      />
+                    </View>
                   </View>
 
-                  <View style={{flex:1,width:200}}>
+                  <View style={{ flex: 1, width: 200 }}>
                     <AppButton
                       title="Choose Image"
                       style={{ marignTop: 5, padding: 0, borderRadius: 5 }}
                       onPress={pickImage}
                     />
-                   {uploaded  && <AppText style={styles.headingTwo}>Image uploaded</AppText>}
+                    {uploaded && (
+                      <AppText style={styles.headingTwo}>
+                        Image uploaded
+                      </AppText>
+                    )}
                   </View>
                   <View style={styles.button}>
                     <AppText
@@ -234,7 +246,8 @@ const ReplyTicketModal = ({
             </View>
           </Screen>
         </View>
-      </Modal>
+      )}
+      {/* </Modal> */}
     </>
   );
 };

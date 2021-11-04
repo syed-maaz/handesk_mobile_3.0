@@ -10,6 +10,7 @@ import { useNavigation, DrawerActions } from "@react-navigation/native";
 import NewTicketScreen from "../screens/NewTicketScreen";
 import TabNavigator from "./TabNavigator";
 import useAuth from "../auth/useAuth";
+import TicketScreen from "../screens/TicketScreen";
 
 // import Onesignal from "../utility/Onesignal";
 
@@ -35,7 +36,7 @@ const CustomDrawerContent = (props) => {
       />
       <DrawerItem
         label="Ticket"
-        onPress={() => navigation.navigate("TicketListing")}
+        onPress={() => navigation.navigate("Ticket")}
       />
       <DrawerItem
         label="New Ticket"
@@ -59,7 +60,7 @@ const DrawerNavigator = () => {
         activeTintColor: "#000000",
         activeBackgroundColor: "#e6e6e6",
       }}>
-      <Drawer.Screen name="Dashboard">
+      <Drawer.Screen name="Home">
         {(props) => <TabNavigator {...props} />}
       </Drawer.Screen>
     </Drawer.Navigator>

@@ -33,11 +33,10 @@ import Context from "../../auth/context";
 
 import styles from "../../assets/styleScript/ticketDetail.style";
 
-const EditModal = ({ isOpen, label, onSubmit, onClose,data }) => {
-  console.log(data)
+const EditModal = ({ isOpen, label, onSubmit, onClose, data }) => {
+  // console.log(data)
   const [openState, setOpenState] = useState("");
   const [title, setTitle] = useState(data?.title || "");
-  
 
   useEffect(() => {
     setOpenState(isOpen);
@@ -71,7 +70,7 @@ const EditModal = ({ isOpen, label, onSubmit, onClose,data }) => {
               style={{ textAlign: "right" }}
             />
             <View style={styles.modalBox}>
-            <AppText style={styles.headingOne}>Edit Ticket Title </AppText>
+              <AppText style={styles.headingOne}>Edit Ticket Title </AppText>
 
               <ScrollView>
                 <View style={styles.innerBox}>

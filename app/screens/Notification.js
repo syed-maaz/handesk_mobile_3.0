@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import * as SecureStore from "expo-secure-store";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import axios from "axios";
 
 import {
   View,
@@ -18,38 +21,27 @@ import Layout from "../components/Layout.js";
 import ActivityIndicator from "../components/ActivityIndicator.js";
 import AppButton from "../components/Button";
 import AppText from "../components/Text.js";
+import { WebSocketContext } from "../context/websocket";
 
-
+import { Navigation } from "../screens/TicketScreen";
 
 function Notification({ navigation, route }) {
+  const { allTicketActivities, ticketActivities } =
+    useContext(WebSocketContext);
+
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [ticketActivites, setTicketActivities] = useState([]);
 
-  // const onRefresh = useCallback(() => {
-  //   console.log("refresh");
-  // }, []);
-
-  const notificationList = [
-    {
-      notification: "Your Ticket is merge by id: 2424",
-      date: "2021-10-12 - 3:00:33PM",
-    },
-    {
-      notification: "New ticket is assign",
-      date: "2021-09-12 - 2:00:33PM",
-    },
-    {
-      notification: "Your Ticket is merge by id: 2234",
-      date: "2021-04-28 - 1:00:33PM",
-    },
-    {
-      notification: "Your Ticket is Update",
-      date: "2021-04-12 - 12:00:33PM",
-    },
-  ];
+  useEffect(() => {
+    console.log("ticket activity", allTicketActivities);
+    // if (ticketActivites) {
+    //   sendNotification(ticketActivities);
+    // }
+  }, [allTicketActivities]);
 
   return (
-    <Provider>
+    <>
       <ActivityIndicator visible={loading} />
       <Layout headerTitle="Notification" navigation={navigation} route={route}>
         {error && (
@@ -64,29 +56,18 @@ function Notification({ navigation, route }) {
             />
           </View>
         )}
-        <View>
-          <View style={styles.container}>
-            <View style={styles.header}>
-              <View style={styles.left}></View>
-              <View style={styles.NotificationIcon}>
-                <Feather name="bell" size={30} color="#3A75BA" />
-                <View style={styles.NotificationBadge}>
-                  <AppText
-                    style={{ color: "#FFF", fontSize: 12, fontWeight: "bold" }}>
-                    {2}
-                  </AppText>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
 
         <SafeAreaView style={styles.containerList}>
-          {!!notificationList && notificationList.length > 0 && (
+          {!!allTicketActivities && allTicketActivities.length > 0 && (
             <FlatList
-              data={notificationList}
+              data={allTicketActivities}
               renderItem={({ item }) => (
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("TicketDetail", {
+                      item: { id: item.id },
+                    });
+                  }}>
                   <View
                     style={{
                       backgroundColor: "white",
@@ -96,25 +77,20 @@ function Notification({ navigation, route }) {
                       borderRadius: 4,
                     }}>
                     <AppText style={styles.heading}>
-                      {item?.notification}
+                      # {item.id} is {item?.action.split(".")[1]}
                     </AppText>
-                    <AppText style={styles.date}>{item?.date}</AppText>
+                    <AppText style={styles.date}>{item?.updated || ""}</AppText>
                   </View>
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => index.toString()}
-              // onRefresh={() => onRefresh()}
               initialNumToRender={5}
               onEndReachedThreshold={0.1}
-              // refreshing={loading}
-              // onEndReached={() => {
-              //   console.log("load more!!");
-              // }}
             />
           )}
         </SafeAreaView>
       </Layout>
-    </Provider>
+    </>
   );
 }
 
@@ -176,7 +152,7 @@ const styles = StyleSheet.create({
   },
 
   onBottom: {},
- 
+
   onRight: {},
   errorContainer: {
     margin: 10,
@@ -206,7 +182,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF0000",
     color: "#FFF000",
   },
- 
 });
 
 export default Notification;

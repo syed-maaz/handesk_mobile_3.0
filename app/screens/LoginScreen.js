@@ -23,6 +23,8 @@ import useAuth from "../auth/useAuth";
 import useApi from "../hooks/useApi";
 import ActivityIndicator from "../components/ActivityIndicator";
 
+import OneSignal from "../utility/Onesignal";
+
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
@@ -37,6 +39,7 @@ function LoginScreen() {
     const result = await loginApi.request(email, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
+    OneSignal.enabledPush(result.data.user.id, email);
     auth.logIn(result.data);
   };
 

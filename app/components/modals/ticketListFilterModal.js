@@ -120,9 +120,9 @@ const ticketListFilterModal = ({
             teams: null,
           }}
           onSubmit={(values) => {
-            console.log("val", values)
-            values['date_from'] = dateFilterFrom
-            values['date_to'] = dateFilterTo
+            // console.log("val", values)
+            values["date_from"] = dateFilterFrom;
+            values["date_to"] = dateFilterTo;
 
             onSubmitFilter(values);
           }}>
@@ -154,8 +154,8 @@ const ticketListFilterModal = ({
                           format="YYYY-MM-DD"
                           confirmBtnText="Confirm"
                           cancelBtnText="Cancel"
-                          name={'select date'}
-                          value={values['select date']}
+                          name={"select date"}
+                          value={values["select date"]}
                           customStyles={{
                             dateIcon: {
                               position: "absolute",
@@ -294,18 +294,16 @@ const ticketListFilterModal = ({
                 </View>
               </ScrollView>
               <View style={styles.btnGroup}>
-
-
                 <AppButton
                   title="Filter"
                   style={{ width: "85%" }}
                   onPress={handleSubmit}
                 />
-                <TouchableOpacity  style={{ width: "15%",marginTop:20}} onPress={() => onSubmitFilter({})} >
-
-                <Entypo name="circle-with-cross" size={50} color="#3d7ab9" />
+                <TouchableOpacity
+                  style={{ width: "15%", marginTop: 20 }}
+                  onPress={() => onSubmitFilter({})}>
+                  <Entypo name="circle-with-cross" size={50} color="#3d7ab9" />
                 </TouchableOpacity>
-
               </View>
             </>
           )}
@@ -363,7 +361,7 @@ const styles = StyleSheet.create({
   btnGroup: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"space-between"
+    justifyContent: "space-between",
   },
   inputHeading: {
     color: "#748AA1",

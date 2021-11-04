@@ -17,6 +17,12 @@ const updateTicketDetail = (ticketId, obj) =>
 const signedImageUrl = (obj) => client.post(`/api/signed-storage-url`, obj);
 const forwardTicket = (ticketId, obj) =>
   client.post(`/api/tickets/${ticketId}/forward`, obj);
+const socketSubscribe = (ticketId) =>
+  client.post(`/api/tickets/${ticketId}/subscribe`);
+const socketUnsubscribe = (ticketId) =>
+  client.post(`/api/tickets/${ticketId}/unsubscribe`);
+const ticketTyping = (ticketId, state) =>
+  client.post(`/api/tickets/${ticketId}/typing?${state}=true`);
 
 export default {
   getDashboardListings,
@@ -31,4 +37,8 @@ export default {
   getAllIntents,
   signedImageUrl,
   forwardTicket,
+  socketSubscribe,
+  socketUnsubscribe,
+  ticketTyping,
+  ticketCreate,
 };

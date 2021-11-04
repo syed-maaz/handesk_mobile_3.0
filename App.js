@@ -14,7 +14,10 @@ import Toast from "react-native-toast-message";
 import listingsApi from "./app/api/listings";
 
 import OneSignal from "./app/utility/Onesignal";
-import Onesignal from "./app/utility/Onesignal";
+
+import WebSocketProvider from "./app/context/websocket";
+
+import * as SplashScreen from "expo-splash-screen";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -70,7 +73,8 @@ export default function App() {
       />
     );
 
-  Onesignal.init("f1c57cfe-35b2-4ddf-8c4e-fd6c54be62e2");
+  OneSignal.init("f1c57cfe-35b2-4ddf-8c4e-fd6c54be62e2");
+
   //OneSignal Init Code
   // OneSignal.setLogLevel(6, 0);
   // OneSignal.setAppId("f1c57cfe-35b2-4ddf-8c4e-fd6c54be62e2");
@@ -104,10 +108,12 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ metaData, user, setUser }}>
-      <NavigationContainer ref={navigationRef} theme={navigationTheme}>
-        {user ? <DrawerNavigator /> : <AuthNavigator />}
-        <Toast ref={(ref) => Toast.setRef(ref)} />
-      </NavigationContainer>
+      <WebSocketProvider>
+        <NavigationContainer ref={navigationRef} theme={navigationTheme}>
+          {user ? <DrawerNavigator /> : <AuthNavigator />}
+          <Toast ref={(ref) => Toast.setRef(ref)} />
+        </NavigationContainer>
+      </WebSocketProvider>
     </AuthContext.Provider>
   );
 }

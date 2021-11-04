@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
+  Alert,
 } from "react-native";
 import {
   MaterialIcons,
@@ -28,7 +29,7 @@ import Screen from "../components/Screen";
 import Context from "../auth/context";
 import { getStatusList } from "../utility/helpers";
 import ActivityIndicator from "../components/ActivityIndicator";
-import axios from 'axios'
+import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
 import listingsApi from "../api/listings";
 
@@ -51,6 +52,7 @@ function NewTicketScreen({ navigation, route }) {
   const richText = useRef();
   const [article, setArticle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const { metaData } = useContext(Context);
 
@@ -109,11 +111,11 @@ function NewTicketScreen({ navigation, route }) {
         name: values.requester_name,
         email: values.requester_email,
       },
-      body: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+      body: article,
       team_id: values.team,
       status: values.status,
       user_id: values.assignee,
-      tags: selectedTags.map((d) => d.name),
+      // tags: selectedTags.map((d) => d.name),
       intent: values.intent,
       // attachments,
     };
@@ -152,15 +154,15 @@ function NewTicketScreen({ navigation, route }) {
     // console.log(result);
 
     if (!result.cancelled) {
-     
-      console.log(result, "result")
+      // console.log(result, "result")
       const res = await listingsApi.signedImageUrl({ url: result.uri });
-      console.log("res", res);
-      const uploadImage = await axios.put(res.data.url, { headers: res.headers })
-      console.log("upload", uploadImage)
-      setUploaded(true)
+      // console.log("res", res);
+      const uploadImage = await axios.put(res.data.url, {
+        headers: res.headers,
+      });
+      // console.log("upload", uploadImage)
+      setUploaded(true);
     }
-
   };
 
   return (
@@ -301,22 +303,22 @@ function NewTicketScreen({ navigation, route }) {
                         name="comment"
                         placeholder="Comments"
                       /> */}
-                       <View>
-                    <RichEditor
-                      disabled={false}
-                      containerStyle={{
-                        backgroundColor: "black",
-                        borderColor: "grey",
-                        borderWidth: 1,
-                      }}
-                      initialHeight={250}
-                      ref={richText}
-                      style={{ height: 500, backgroundColor: "#F5FCFF" }}
-                      placeholder={"Start Writing Here"}
-                      onChange={(text) => setArticle(text)}
-                    />
-                    <RichToolbar editor={richText} />
-                  </View>
+                      <View>
+                        <RichEditor
+                          disabled={false}
+                          containerStyle={{
+                            backgroundColor: "black",
+                            borderColor: "grey",
+                            borderWidth: 1,
+                          }}
+                          initialHeight={250}
+                          ref={richText}
+                          style={{ height: 500, backgroundColor: "#F5FCFF" }}
+                          placeholder={"Start Writing Here"}
+                          onChange={(text) => setArticle(text)}
+                        />
+                        <RichToolbar editor={richText} />
+                      </View>
                     </View>
                   </View>
                   <View>
@@ -330,13 +332,17 @@ function NewTicketScreen({ navigation, route }) {
                       />
                     </View>
                   </View>
-                  <View style={{flex:1,width:200}}>
+                  <View style={{ flex: 1, width: 200 }}>
                     <AppButton
                       title="Choose Image"
                       style={{ marignTop: 5, padding: 0, borderRadius: 5 }}
                       onPress={pickImage}
                     />
-                   {uploaded  && <AppText style={styles.headingTwo}>Image uploaded</AppText>}
+                    {uploaded && (
+                      <AppText style={styles.headingTwo}>
+                        Image uploaded
+                      </AppText>
+                    )}
                   </View>
                   <AppButton
                     title="Create Ticket"
@@ -523,7 +529,7 @@ const styles = StyleSheet.create({
     borderColor: "#30303033",
     borderRadius: 12,
     position: "relative",
-    width: '100%',
+    width: "100%",
   },
   filterInputLabel: {
     position: "absolute",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import {
   View,
@@ -61,7 +61,7 @@ import { get } from "react-native/Libraries/Utilities/PixelRatio";
 
 function TicketScreen({ navigation, route, status, type }) {
   const ticketRouteType = route?.params?.item || type || "open";
-  // console.log(ticketRouteType);
+  // // console.log(ticketRouteType);
   const [ticketList, setTicketList] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -168,12 +168,12 @@ function TicketScreen({ navigation, route, status, type }) {
     if (searchCriteria.date_from) {
       if (searchCriteria.date_to) {
         param += `&range=updated_at,${searchCriteria.date_from},${searchCriteria.date_to}`;
-        console.log("date", searchCriteria.date_to);
+        // console.log("date", searchCriteria.date_to);
       } else {
         param += `&range=updated_at,${searchCriteria.date_from},${new Date(
           Date.now()
         )}`;
-        console.log("dateelse", searchCriteria.date_from);
+        // console.log("dateelse", searchCriteria.date_from);
       }
     }
     // =updated_at,2021-09-08,2021-09-08
@@ -188,7 +188,7 @@ function TicketScreen({ navigation, route, status, type }) {
   const handleSearchTicket = (searchObj) => {
     setFilterModalVisible(false);
 
-    console.log("searchobj", searchObj);
+    // console.log("searchobj", searchObj);
 
     const _searchCriteria = {};
     let _filterCount = 0;
@@ -232,7 +232,7 @@ function TicketScreen({ navigation, route, status, type }) {
       _searchCriteria.date_to = searchObj.date_to;
       _filterCount++;
     }
-    console.log("_searchCriteria", _searchCriteria);
+    // console.log("_searchCriteria", _searchCriteria);
 
     setSearchCriteria(_searchCriteria);
     setNumOfFilterActive(_filterCount);
@@ -241,7 +241,7 @@ function TicketScreen({ navigation, route, status, type }) {
 
   const getTicketData = async (mergeList = false) => {
     setLoading(true);
-    console.log(generateUrlParams());
+    // console.log(generateUrlParams());
     const { ok, status, data } = await listingsApi.getTicketListings(
       generateUrlParams()
     );
@@ -274,14 +274,14 @@ function TicketScreen({ navigation, route, status, type }) {
     let selectedData = ticketList.map((i) => {
       if (item.id === i.id) {
         i.selected = !i.selected;
-        console.log(i.selected);
+        // console.log(i.selected);
       }
       return i;
     });
     const id = item.id;
     setTicketList(selectedData);
     setTicketId((pre) => ({ ...pre, id }));
-    console.log(ticketId, "ticket");
+    // console.log(ticketId, "ticket");
     const Isselect = selectedData.find((item) => item.selected === true);
 
     Isselect !== undefined ? setIsSelected(true) : setIsSelected(false);
@@ -306,7 +306,7 @@ function TicketScreen({ navigation, route, status, type }) {
         onRetryApi();
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
 
     setLoading(false);
@@ -321,7 +321,7 @@ function TicketScreen({ navigation, route, status, type }) {
     try {
       const resp = await listingsApi.ticketAssign({ tickets: reqBody });
       const { ok, status, data } = resp;
-      console.log(resp);
+      // console.log(resp);
       setError(!ok);
 
       if (!!ok && status === 200) {
@@ -330,7 +330,7 @@ function TicketScreen({ navigation, route, status, type }) {
         onRetryApi();
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
 
     setLoading(false);
@@ -354,7 +354,7 @@ function TicketScreen({ navigation, route, status, type }) {
         onRetryApi();
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
 
     setLoading(false);
@@ -405,7 +405,7 @@ function TicketScreen({ navigation, route, status, type }) {
                       <Menu.Item
                         key={i}
                         onPress={(e) => {
-                          // console.log(d.value);
+                          // // console.log(d.value);
                           setTypeOfTicket(d.value);
                         }}
                         title={d.label}
@@ -473,7 +473,7 @@ function TicketScreen({ navigation, route, status, type }) {
               refreshing={loading}
               onEndReached={() => {
                 setPageNumber(pageNumber + 1);
-                // console.log("load more!!");
+                // // console.log("load more!!");
               }}
             />
           )}
@@ -731,7 +731,8 @@ function MyStack() {
 }
 
 export default function Navigation() {
-  return <MyStack />;
+  const navigatorRef = useRef();
+  return <MyStack ref={navigatorRef} />;
 }
 
 // export default TicketScreen;

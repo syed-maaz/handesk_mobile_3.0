@@ -96,20 +96,19 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingTop:0,
-  
+    paddingTop: 0,
+
     // paddingVertical: 5,
     flex: 0.8,
   },
   EditTextInput: {
-    
     // width: "80%",
-    borderRadius:8,
+    borderRadius: 8,
     flex: 0.8,
-    borderWidth:0.5,
-    paddingHorizontal:5,
-paddingVertical:3,
-borderColor: "#30303033"
+    borderWidth: 0.5,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
+    borderColor: "#30303033",
     // flexGrow: 0.5,
   },
   updateButton: {
@@ -117,8 +116,8 @@ borderColor: "#30303033"
     // height: 35,
     alignSelf: "center",
     marginLeft: 5,
-    backgroundColor:"white"
-  
+    backgroundColor: "white",
+
     // marginHorizontal:0
     // borderRadius: 5,
   },
@@ -126,7 +125,7 @@ borderColor: "#30303033"
     color: "#748AA1",
     fontSize: 14,
     fontWeight: "normal",
-    flex:1
+    flex: 1,
   },
   inputSubHeading: {
     color: "#545454",
@@ -168,14 +167,13 @@ borderColor: "#30303033"
     fontSize: 18,
     color: "#FFFFFF",
     fontWeight: "bold",
-   
   },
   centeredView: {
-    height: "100%",
-    marginTop: "auto",
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    // height: "100%",
+    // marginTop: "auto",
+    // backgroundColor: "#FFFFFF",
+    // borderTopLeftRadius: 16,
+    // borderTopRightRadius: 16,
     borderWidth: 1,
     borderColor: "rgba(0,0,0,0.18)",
     padding: 10,
@@ -183,7 +181,7 @@ borderColor: "#30303033"
   },
   modalBox: {
     padding: 0,
-    marginTop: 10,
+    // marginTop: 10,
   },
   editInput: {
     width: "85%",
@@ -225,8 +223,8 @@ borderColor: "#30303033"
   picker: {
     borderRadius: 8,
     backgroundColor: "transparent",
-    padding:5,
-    paddingHorizontal:8
+    padding: 5,
+    paddingHorizontal: 8,
   },
   btnGroup: {
     flexDirection: "row",

@@ -91,6 +91,7 @@ function TicketDetailScreen({ navigation, route }) {
   const comments = ["open", "solved", "Resolved"];
 
   const [selection, setSelection] = useState(1);
+  const [ticketStatus, setTicketStatus] = useState("");
 
   useEffect(() => {
     if (metaData) {
@@ -152,6 +153,7 @@ function TicketDetailScreen({ navigation, route }) {
 
     if (status === 200) {
       setTicketDetail(data.data);
+      setTicketStatus(statusName(data.data.status));
     }
     setLoading(false);
   };
@@ -217,6 +219,7 @@ function TicketDetailScreen({ navigation, route }) {
         autoHide: true,
       });
     } else {
+      console.log(res);
       Toast.show({
         type: "error",
         text1: "Ticket not updated",
@@ -243,7 +246,8 @@ function TicketDetailScreen({ navigation, route }) {
       );
 
       if (lastCommentDate === ticketCreatAt) {
-        comments.pop();
+        if (!comments[comments.length - 1].hasOwnProperty("intent"))
+          comments.pop();
       }
       mergeComments = Array.from(
         comments
@@ -300,12 +304,15 @@ function TicketDetailScreen({ navigation, route }) {
             <View style={styles.container}>
               <View style={styles.boxes}>
                 <AppText style={styles.headingOne}>
-                  {/* <View style={styles.statusBox}>
-                    {/* <AppText style={styles.status}>
-                      {/* {statusName(ticketDetail.status)} 
-                    </AppText> 
-                  </View> */}
-                  #{ticketDetail?.id}. {ticketDetail.title}{" "}
+                  <View style={styles.statusBox}>
+                    <AppText style={styles.status}>{ticketStatus}</AppText>
+                  </View>
+                  <HTML
+                    contentWidth={window.width}
+                    source={{
+                      html: ticketDetail?.id + ". " + ticketDetail.title,
+                    }}
+                  />
                   {EditableField && (
                     <Entypo
                       name="edit"
@@ -321,10 +328,7 @@ function TicketDetailScreen({ navigation, route }) {
                     onPress={() => setForwardModalVisible(true)}
                   />
                 </AppText>
-                <HTML
-                  contentWidth={window.width}
-                  source={{ html: ticketDetail.title }}
-                />
+
                 <AppText style={styles.headingTwo}>
                   {ticketDetail.requester.name}
                 </AppText>
@@ -359,7 +363,7 @@ function TicketDetailScreen({ navigation, route }) {
                 )}
                 <View>
                   <View style={styles.btnGroup}>
-                    {statusName(ticketDetail.status) !== "Solved" && (
+                    {ticketStatus !== "Solved" && (
                       <TouchableOpacity
                         style={[styles.btn, { backgroundColor: "#3A75BA" }]}
                         onPress={() =>
@@ -372,7 +376,7 @@ function TicketDetailScreen({ navigation, route }) {
                         </Text>
                       </TouchableOpacity>
                     )}
-                    {statusName(ticketDetail.status) !== "Open" && (
+                    {ticketStatus !== "Open" && (
                       <TouchableOpacity
                         style={[
                           styles.btn,
@@ -587,6 +591,54 @@ function TicketDetailScreen({ navigation, route }) {
                     </View>
                   </View>
 
+                  <View>
+                    {ticketDetail && (
+                      <ReplyTicketModel
+                        isOpen={replyModalVisible}
+                        onClose={() => {
+                          setReplyModalVisible(false);
+                        }}
+                        faqDropdown={
+                          <UpdateFieldDropdown
+                            items={faqList}
+                            name="Select Template"
+                            placeholder="Select Template"
+                            onSubmit={(values) => {
+                              updateTicketItem({
+                                team_id: values.team.value,
+                              });
+                              setEditTeam(!editTeam);
+                            }}
+                          />
+                        }
+                        signDropdown={
+                          () => <></>
+                          // <UpdateFieldDropdown
+                          //   items={[]}
+                          //   name="Select Signature"
+                          //   placeholder="Select Signature"
+                          //   onSubmit={(values) => {
+                          //     updateTicketItem({
+                          //       team_id: values.team.value,
+                          //     });
+                          //     setEditTeam(!editTeam);
+                          //   }}
+                          // />
+                        }
+                        data={ticketDetail}
+                        onSubmit={(reqObj) => {
+                          console.log(reqObj);
+                          updateTicketItem({
+                            status: ticketDetail.status,
+                            private: 0,
+                            ...reqObj,
+                          });
+                          setReplyModalVisible(false);
+                        }}
+                      />
+                    )}
+                  </View>
+
                   <View style={{ marginBottom: 5 }}>
                     <View>
                       <AppText style={[styles.para, { fontWeight: "700" }]}>
@@ -687,6 +739,7 @@ function TicketDetailScreen({ navigation, route }) {
                       </View>
                     </View>
                   </View>
+
                   {/* <View style={styles.inputBox}>
 
                     <AppText style={styles.inputHeading}>FAQ Template</AppText>
